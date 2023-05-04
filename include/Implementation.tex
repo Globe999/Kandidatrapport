@@ -1,5 +1,6 @@
 \chapter{Implementation}
-In order to achieve the project objective, it was necessary for the Android application to establish communication with ATOS. An illustrative chart showcasing the integration process is presented below:
+In order to achieve the project objective, it was necessary to apprehend a clear and unified understanding of all software components. 
+The Android application to establish communication with ATOS. An illustrative chart showcasing the integration process is presented below:
 
 \begin{figure}[H]
   \centering
@@ -9,10 +10,11 @@ In order to achieve the project objective, it was necessary for the Android appl
 \end{figure}
 The object-control module within the ATOS software facilitates the transmission of trajectories for drones and test-objects in the local coordinate system, situated on the AstaZero test track through the ISO22133 protocol. The drone application subsequently converts this data into global latitude and longitude coordinates, referred to as "Waypoints "\todo{ändrade detta då vi inte använder WP2.0 //MS}, through the utilization of the DJI Mobile SDK. Consequently, the drone application transmits the way-points to the drone by means of the DJI protocol, effectively initializing it. Following this, the test commences, and the drones and test objects following their pre-determined trajectories.
 
-\section{Capabilities of existing software}
+\section{Re-usability of existing software}
 
 \subsection{Waypoint 1 Activity}
 \subsection{Douglas-Peucker Algorithm}
+\subsection{}
 
 \section{Implementation of missions}
 \todo{Hitta nytt namn}
