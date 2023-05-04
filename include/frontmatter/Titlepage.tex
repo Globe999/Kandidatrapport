@@ -1,0 +1,144 @@
+% CREATED BY MAGNUS GUSTAVER, 2020
+
+\ifx\ThesisType\undefined
+Undefined Thesis type in settings.tex
+\else
+  \if\ThesisType M
+    \else
+    \if\ThesisType B
+    \else
+    Define \textbackslash ThesisType as M for master's thesis or B for bachelor thesis in settings.tex
+    \fi
+  \fi
+\fi
+
+% COVER PAGE
+\begin{titlepage}
+\newgeometry{top=3cm, bottom=1cm,
+			left=2.25 cm, right=2.25cm}	% Temporarily change margins		
+			
+%Header Front Page
+\ifx\ThesisType\undefined
+\else
+    \if\ThesisType M
+    \vtop{
+        \null\vspace{-25mm}
+        \centerline{\includegraphics[width=1.18\textwidth]{figure/auxiliary/GrayHeaderPattern.jpg}}
+        \vspace{-2.3cm}
+        \hbox{\hspace{0mm}\includegraphics[height=18mm]{figure/auxiliary/AvancezChalmersU_white_right.eps}}
+        \centerline{\textcolor{headerBrown}{\rule{1.18\textwidth}{4pt}}}
+        \vspace{\paperheight}\vspace{-85mm}
+        \centerline{\textcolor{thesisHeaderColor}{\rule{1.1\textwidth}{0.8pt}}} % Rule after Department
+        \vspace{-\paperheight}\vspace{85mm}
+    }
+    \fi
+    \if\ThesisType B
+    \vtop{
+        \null\vspace{-25mm}
+        \centerline{\includegraphics[width=1.18\textwidth,height=80pt]{figure/auxiliary/GreenHeaderPattern.jpg}}
+        \vspace{-2.3cm}
+        \hbox{\hspace{0mm}\includegraphics[height=18mm]{figure/auxiliary/AvancezChalmers_white_right.eps}}
+        \centerline{\textcolor{headerBrown}{\rule{1.18\textwidth}{4pt}}}
+        \vspace{\paperheight}\vspace{-85mm}
+        \centerline{\textcolor{thesisHeaderColor}{\rule{1.1\textwidth}{0.8pt}}} % Rule after Department
+        \vspace{-\paperheight}\vspace{85mm}
+    }
+    \fi
+\fi
+
+% Cover picture (replace with your own or delete)		
+\begin{figure}[H]
+\centering
+\vspace{1cm}	% Adjust vertical spacing here
+\includegraphics[width=0.9\linewidth]{AstaZeroDryZone8-e1643576947955.png}
+\end{figure}
+
+% Cover text
+\mbox{}
+\vfill
+\renewcommand{\familydefault}{\sfdefault} \normalfont % Set cover page font
+\textbf{{\Huge 	Automate the video documentation 	\\[0.2cm] 
+				of a Euro NCAP test by use of drones           \\[0.2cm]
+     }} \\ [0.5cm]
+{\Large EENX16-23-26}\\[0.5cm]
+Bachelor's thesis in System Control \setlength{\parskip}{1cm}
+
+
+{\Large Johan Gustafsson \\[0.2cm] Christoffer Oresten \\[0.2cm] Teddy Sallén \\[0.2cm] Mårten Sanderöd \\[0.2cm] Leonard Smedenman \\[0.2cm] Axel Toresson } \setlength{\parskip}{1cm}
+
+\noindent
+\textcolor{thesisHeaderColor}{\small\textbf{DEPARTMENT OF ELECTRICAL ENGINEERING}}
+\setlength{\parskip}{1mm}
+
+\textsc{Chalmers University of Technology} \\
+{\small Gothenburg, Sweden \the\year \\
+\href{www.chalmers.se}{www.chalmers.se}}\vspace{1.7cm}
+
+\renewcommand{\familydefault}{\rmdefault} \normalfont % Reset standard font
+\end{titlepage}
+
+
+% BACK OF COVER PAGE (BLANK PAGE)
+\newpage
+\restoregeometry
+\thispagestyle{empty}
+\mbox{}
+
+
+% TITLE PAGE
+\newpage
+\thispagestyle{empty}
+\begin{center}
+	\textsc{\large Bachelor's thesis \the\year}\\[4cm]
+	\textbf{\Large Automate the video documentation of a \\[0.5cm] Euro NCAP test by use of drones} \\[1.5cm]
+
+ \centering
+	{\large Johan Gustafsson \\[0.15cm] Christoffer Oresten \\[0.15cm] Teddy Sallén \\[0.15cm] Mårten Sanderöd \\[0.15cm] Leonard Smedenman \\[0.15cm] Axel Toresson } \setlength{\parskip}{1cm}
+	
+	\vfill	
+	% Logotype on titlepage	
+	\begin{figure}[H]
+	\centering
+	% Remove this figure to remove the titlepage logotype
+	\if\ThesisType M
+    \includegraphics[width=0.2\pdfpagewidth]{figure/auxiliary/AvancezChalmersU_black_centered.eps} \\
+    \fi
+    \if\ThesisType B
+    \includegraphics[width=0.2\pdfpagewidth]{figure/auxiliary/AvancezChalmers_black_centered.eps} \\
+    \fi
+	%\includegraphics[width=0.2\pdfpagewidth]{figure/auxiliary/AvancezChalmersU_black_centered.eps} \\
+	\end{figure}	\vspace{5mm}	
+	
+	Department of Electrical Engineering \\
+	\emph{Division of System Control}\\
+	EENX16-23-26\\
+	\textsc{Chalmers University of Technology} \\
+	Gothenburg, Sweden \the\year \\
+\end{center}
+
+
+% IMPRINT PAGE (BACK OF TITLE PAGE)
+\newpage
+\thispagestyle{plain}
+
+Automate the video documentation of a Euro
+NCAP test by use of drones
+\copyright ~ EENX-16-23-26, \the\year. \setlength{\parskip}{1cm}
+
+Supervisor: Martin Fabian, Automation\\
+Examiner: Knut Åkesson, Automation \setlength{\parskip}{1cm}
+
+Bachelor's Thesis \the\year\\	
+Department of Electrical Engineering\\
+Division of System Control\\
+EENX16-23-26\\
+Chalmers University of Technology\\
+SE-412 96 Gothenburg\\ \setlength{\parskip}{0.5cm}
+
+\vfill
+% Caption for cover page figure if used, possibly with reference to further information in the report
+Cover: AstaZero test track 
+\textcolor{red}{referera till bild här}\setlength{\parskip}{0.5cm}
+
+Typeset in \LaTeX \tagtemp\\
+Gothenburg, Sweden \the\year

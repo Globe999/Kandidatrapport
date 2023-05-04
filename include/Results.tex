@@ -1,0 +1,94 @@
+% CREATED BY MAGNUS GUSTAVER, 2020
+\chapter{Results}
+
+\section{Cost-benefit analysis}
+As previously stated there was a requirement for conducting a cost-benefit analysis for the incorporation of the drones and the developed drone app. 
+\\
+
+The current utilization of drones for filming the different tests at AstaZero’s facility is mostly stationary. The integration of the developed drone app, together with the existing software ATOS, will allow for dynamic filming. Whether the possibility of dynamic filming is beneficial, both from a financial standpoint and in terms of time however, is something that needs to be investigated. 
+\\
+
+When conducting a cost-benefit analysis there are a lot of minor parameters which can be taken into account, and a lot of different viewpoints that could change depending on the chosen approach. This analysis is dissected into the major and more clearly stated points of affect. 
+The main cost for the project would be the cost of (at least) one drone of type DJI Mavic Enterprise ZOOM, which is roughly 20000 SEK (https://djistockholm.se/kategori/dji-mavic-main/).(MENDELEY JÄVLAS MED MIG, FÅR LÖSA SEN)
+\\
+
+However, depending on adopted approach, this expense could be considered a sunk cost, as the drones are already paid for, regardless of whether AstaZero chooses to utilize the project group's developed app or maintain the current configuration of stationary footage.
+\\
+
+In addition, maintenance expenses such as unforeseen repairs and charging requirements should also be considered.
+Furthermore there are the labor costs, information regarding how many workers are needed to conduct the tests are not specified and vary from time to time. However, a deduction of at least one manpower position is reasonable due to the app-enabled automatic flying capability of the drones, which eliminates the need for an individual human operator per drone, unlike the current configuration. However, considering that the development of the app is completely free for the client in terms of labor costs, the NPV-analysis will neglect salary costs for developers, making it non-applicable for use outside of this specific project.  
+\\
+
+The implementation and subsequent development of the application will ensure the production of consistent and dynamic footage over an extended period of time. In the event that the trajectories for the test objects and the drones remain unchanged, this will establish standardized scenes for all future tests conducted. As a result, this will provide a clearer overview of the different tests and facilitate a more straightforward comparison of the various vehicles based on the footage.
+
+Furthermore, if AstaZero chooses to continue to use DJI as their drone provider, and assuming that future versions of drones remain similar to the current models, the application will continue to serve as a useful tool for documentation of Euro NCAP tests without becoming obsolete. 
+\\
+
+This configuration also reduces the need for human interaction, it also eliminates the risk for human errors while footage is being captured, making it feasible that the lifetime for the drones will be maximised. Combining all these considerations, the potential upside of this configuration heavily outweighs the minuscule potential downsides. 
+
+In strictly monetary terms, the annual savings of the implementation can be calculated with data provided by the manager at the AstaZero facility through an interview. 
+\\
+
+According to the facility-manager there are roughly 300 tests annually that includes the use of drones. The test itself in effective time takes five minutes, however, with estimated preparation-time it is rather around 15 minutes. The stated hourly cost for each worker was said to be 350 SEK. 
+\\
+
+Taking all of these factors into consideration, the following equations can be derived:
+\\
+
+Total hours:
+\begin{equation}
+    300 \cdot 0.25 = 75 h
+\end{equation}
+
+Saved amount per hour:
+\begin{equation}
+    350 \cdot 2 - 350 = 350kr/h
+\end{equation}
+
+Total amount saved per year:
+\begin{equation}
+    350 \cdot 75 = 26250kr
+\end{equation}
+
+
+\subsection{Net present value analysis}
+In order to quantify the costs and savings for implementing the drone configuration in monetary terms, there is a need to define the usual annual costs for the drones and for labor. AstaZero is an non-profit organization, which means that they are unlikely to have a discount rate for alternative investments. The NPV-analysis will therefore only take inflation into account when calculating the value. 
+\\
+
+All the data for the NPV-analysis are taken from an interview with the testing manager at the AstaZero facility. However, it is based on assumptions and is shown to give an overview for the monetary benefits of implementing the drone-app-configuration. 
+(BEHÖVS KÄLLA OCKSÅ?????????????)
+
+The following parameters are taken into consideration for the NPV:
+\begin{itemize}
+    \item Cost of one singular drone: 20000 SEK
+    \item Saved amount annually for a reduction of one manpower: 26250 SEK
+    \item Estimated annual maintenance costs: 1500 SEK
+    \item Estimated future inflation rate: 4\% (which is way higher than the mean value over the last few decades, which is less than 2\%)
+\end{itemize}
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\begin{table}[h]
+\begin{tabular}{|lcccccc|}
+\hline
+\rowcolor[HTML]{B6D7A8} 
+\multicolumn{7}{|c|}{\cellcolor[HTML]{B6D7A8}\textbf{Net Present Value Analysis {[}SEK{]}}}                                                                                                                                                                                                                                                       \\ \hline
+\multicolumn{1}{|l|}{Year}                                      & \multicolumn{1}{c|}{0}                              & \multicolumn{1}{c|}{1}                             & \multicolumn{1}{c|}{2}                             & \multicolumn{1}{c|}{3}                             & \multicolumn{1}{c|}{4}                             & 5     \\ \hline
+\rowcolor[HTML]{A4C2F4} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{A4C2F4}Drone investment}  & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}-20000} & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}}      & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}}      & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}}      & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}}      &       \\ \hline
+\multicolumn{1}{|l|}{Saved amount}                              & \multicolumn{1}{c|}{}                               & \multicolumn{1}{c|}{26250}                         & \multicolumn{1}{c|}{26250}                         & \multicolumn{1}{c|}{26250}                         & \multicolumn{1}{c|}{26250}                         & 26250 \\ \hline
+\rowcolor[HTML]{A4C2F4} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{A4C2F4}Maintenance costs} & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}}       & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}-1500} & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}-1500} & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}-1500} & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}-1500} & -1500 \\ \hline
+\multicolumn{1}{|l|}{Net value (NV)}                            & \multicolumn{1}{c|}{}                               & \multicolumn{1}{c|}{24750}                         & \multicolumn{1}{c|}{24750}                         & \multicolumn{1}{c|}{24750}                         & \multicolumn{1}{c|}{24750}                         & 24750 \\ \hline
+\rowcolor[HTML]{A4C2F4} 
+\multicolumn{1}{|l|}{\cellcolor[HTML]{A4C2F4}Inflation rate}    & \multicolumn{1}{l|}{\cellcolor[HTML]{A4C2F4}}       & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}4\%}   & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}4\%}   & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}4\%}   & \multicolumn{1}{c|}{\cellcolor[HTML]{A4C2F4}4\%}   & 4\%   \\ \hline
+\multicolumn{1}{|l|}{NV adjusted for inflation}                 & \multicolumn{1}{c|}{-20000}                         & \multicolumn{1}{c|}{23798}                         & \multicolumn{1}{c|}{22883}                         & \multicolumn{1}{c|}{22003}                         & \multicolumn{1}{c|}{21156}                         & 20343 \\ \hline
+\rowcolor[HTML]{B6D7A8} 
+\multicolumn{7}{|c|}{\cellcolor[HTML]{B6D7A8}Net present value = sum(NV) = 90183 kr}                                                                                                                                                                                                                                                              \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
