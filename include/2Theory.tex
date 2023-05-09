@@ -17,16 +17,19 @@ In this section the hardware that is used will be presented, which is a drone, a
 \begin{figure}[h!]
 \centering
  \includegraphics[width=0.65\textwidth,angle =0]{figure/DJI_mavick_2_enterprise.png}
-\caption{Picture of the DJI Mavic 2 Enterprise}
+\caption{Picture of the DJI Mavic 2 Enterprise ~\cite{DJI2021MAVICMANUAL}}
 \end{figure}
 
 
 The unmanned aerial vehicle (UAV) utilized in this project is the DJI Mavic 2 Enterprise, developed by the Chinese technology company DJI. This UAV has garnered widespread popularity in the commercial and industrial community due to its compact design, advanced camera capabilities, and ease of use.
+\newline
 
-The Mavic 2 Enterprise is equipped with a 3-axis gimbal stabilized camera that can capture high-quality 4K video and 12MP photos. It features omnidirectional obstacle sensing and avoidance with sensors positioned on the front, back, bottom, and sides, as well as a GPS and magnetometer sensor, which allows the drone to maintain a stable hovering position.
+The Mavic 2 Enterprise is equipped with a 3-axis gimbal stabilized camera that can capture high-quality 4K video and 12MP photos ~\cite{DJI2018MavicDJI}  . It features omnidirectional obstacle sensing and avoidance with sensors positioned on the front, back, bottom, and sides, as well as a GPS and magnetometer sensor, which allows the drone to maintain a stable hovering position.
+\newline
 
 %\textcolor{red}{Ska detta vara med? In order to control the drone, an RC is necessary, which communicates with the drone on 2.4GHz or 5.8GHz depending on the surroundings.}
 A compatible smartphone with a designated application must be connected to the RC via an USB cable if a live feed from the drone is desired. DJI offers its own application that offers pilots a wide array of modes, settings, and options to customize and monitor the live feed from the drone. This application can be downloaded from either the App Store or Google Play. However, given the autonomous nature of this project, a bespoke application tailored specifically for this purpose had to be developed.
+\newline 
 
 The Mavic 2 Enterprise has a maximum flight time of up to 31 minutes and a range of up to 8 kilometers, making it a versatile and effective tool for various applications. However, it is important to note that drone laws and regulations vary by country and region, and certain areas may require permits to fly beyond visual line of sight or certain distances. Therefore, strict adherence to local regulations and safety protocols is of paramount importance when operating the Mavic 2 Enterprise or any other UAV.
 
@@ -48,52 +51,22 @@ This section will describe the software that is being used in this project, whic
 
 
 \subsection{ISO DTS 22133 Communications Protocol} \label{ISO}
+\todo{Skriva om skriva rätt //MS}
 In order to properly test collision avoidance systems and carry out numerous other test, it is necessary to conduct testing on the specialized proving grounds, a controlled environment that is safe for both the driver and other motorists. In order to create realistic traffic scenarios, the proving grounds must make use of various targets that can represent both vehicles and / or pedestrians.
 
-\begin{figure}[!h]
+The ISO DTS 22133 document states the requirements, functionality, and protocol necessary for controlling multi target-carrier systems to create and monitor realistic traffic scenarios in a safe and effective manner. The ISO22133 is a standard designed to work with multiple manufacturers and different objects. Each object holds a state which is controlled from the control center. 
+\\ \\
+\begin{figure}[H]
   \centering
-  \includegraphics[scale=0.6]{figure/Olika_states.png}
-  \caption{Test object states}
+  \includegraphics[scale=0.6]{figure/ISO-states.png}
+  \caption{Illustration of relevant object states and their transitions}
   \label{fig:iso_states}
 \end{figure}
-
-The ISO DTS 22133 document states the requirements, functionality, and protocol necessary for controlling multi target-carrier systems to create and monitor realistic traffic scenarios in a safe and effective manner.
-The different states of the test object are displayed in figure~\ref{fig:iso_states}. The states are described in \ref{tab:states}
-
-\begin{table}[!h]
-  \centering
-  \begin{tabular}{|c|c|p{0.45\textwidth}|}
-    \hline
-    \textbf{State ID} & \textbf{State name} & \textbf{State description} \\
-    \hline
-    0x00 & OFF& Test object turned off \\
-    \hline
-    0x01 & INIT& Test object in initializing phase, e.g. setting up supporting system\\
-    \hline
-   0x02 & ARMED &Test object ready to execute the test \\
-    \hline
-    0x03 & DISARMED & Test object connected to the control center(in this case ATOS) \\
-    \hline
-    0x04& RUNNING & Test scenario is executing  \\
-    \hline
-    0x05 & NORMAL\_STOP &Test scenario has been executed/finished \\
-    \hline
-      0x06 & REMOTECONTROL & Test object is manually driven by the control center or external remote control\\
-    \hline
-     0x07 &EMERGENCY\_STOP & Test object is currently emergency stopping\\
-    \hline
-      0x08 &PRE-ARMING& Test object is currently preparing for arm\\
-    \hline
-      0x09 & PRE-RUNNING &Test object is waiting for running or preparing for running \\
-    \hline
-  
-  \end{tabular}
-  \caption{Test object state description}
-  \label{tab:states}
-\end{table} 
+Figure~\ref{fig:iso_states} displays the various states and transitions of the test object, each representing a specific action. In the ''Init'' state, the object is initialized but not connected to the control center. When the control center establishes a successful connection, the object moves to the ''Disarmed'' state, meaning it's ready to receive telemetry data and begin mission planning. Once armed, the object receives the telemetry data and is set to execute the test. During the ''Running'' state, all objects follow their predetermined trajectories until each object reaches its endpoint. The test then moves to the ''Normal Stop'' state, indicating that the test has concluded. From ''Normal Stop,'' the objects can transition back to the ''Disarmed'' state to repeat the sequence. Additionally, the ''Disarmed'' state can be reached from the ''Emergency Stop'' state, which acts as a kill switch to abort the test.
+\\ \\
+Note that some states from the ISO22133 protocol are not shown in the figure, as they're not relevant to this project. One such state is the ''Remote Ctr'' state, which allows the operator to move the object freely without relying on predetermined telemetry, while still maintaining a connection to the control center.
 \subsection{Autonomous Vehicle testing operating system (ATOS)} \label{ATOS}
-The core of each test is ATOS, short for Automatic Vehicle Testing Operating System, which follows different standards developed by AstaZero and creates paths for each object that is part of the test. An extensive comprehension of the ATOS software needs to be obtained, this includes the functional requirements, software specifications and the communication protocol. The information can be obtained from the ISO22133 protocol \todo{\cite{} till ISO} as well as in the actual codebase \todo{ref till ATOS github}. The project is mainly written in the programming languages C and C++ and developed on and Linux platform. The integration of ATOS in this project is illustrated in Figure~\ref{fig:ATOS-flow}.
-
+The core of each test is ATOS, short for Automatic Vehicle Testing Operating System, which follows the standards stated in the ISO22133 documentation and creates trajectories for each object that is part of the test. An extensive comprehension of the ATOS software needs to be obtained, this includes the functional requirements, software specifications and the communication protocol. The information can be obtained from the ISO22133 protocol \todo{\cite{} till ISO} as well as in the actual codebase \cite{AstaZero2023ATOS:Systems.}. The project is mainly written in the programming languages C and C++ and developed on and Linux platform. The integration of ATOS in this project is illustrated in Figure~\ref{fig:ATOS-flow}.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{figure/flow_config.png}
@@ -108,39 +81,48 @@ The core of each test is ATOS, short for Automatic Vehicle Testing Operating Sys
 As stated in the last section, ATOS is being developed using a Linux operating system, specifically Ubuntu 20.04. Linux and Windows have some fundamental differences making it impossible to compile projects aimed at Linux operating systems on Windows. Both the ATOS project and the Android application provided by AstaZero have dependencies on other Linux programs which is why an old version of the Ubuntu operating system was required. The team therefore had to familiarize themselves with Ubuntu 20.04 and use it for all development purposes during the project. 
 
 \subsection{Java, Android, SDKs and Android Studio} \label{Java, Android....}
-The application is programmed in one of the major mobile operating systems named Android \todo{Ska de bara vara fakta här eller kan man skriva såhär?}. Android provides a framework for communicating with any mobile device running the Android operating system. The operating system is built using different activities which represent different parts of the application \todo{referens} and focuses on one single thing a user can do. For instance, one activity could be the landing page of the application while another activity could be the interface which communicates with the drone. Together these different activities makes up the application and communicate which each other.
+The application is programmed in one of the major mobile operating systems named Android \todo{Ska de bara vara fakta här eller kan man skriva såhär?}. Android provides a framework for communicating with any mobile device running the Android operating system. The operating system is built using different activities which represent different parts of the application \todo{referens} and focuses on one single thing a user can do \cite{Android}. For instance, one activity could be the landing page of the application while another activity could be the interface which communicates with the drone. Together these different activities makes up the application and communicate which each other.
 \\ \\
 The recommended option to develop Android applications is Android's own program called Android Studio. The program provides all necessary tools for developing Android applications in Java. It has also support for designing the user interface in both a visual studio and using the programming language XML.
 \\ \\
 Android enables the developers to use outside libraries, also called Software Development Kits (SDK). These external libraries allows the developer to use other code written by other developers and use their frameworks. DJI provides their own SDK for communicating with their different products.
-\\ \\
-\todo{Ska flytta om nästa stycke}
+\newline
 To access the functionalities of the DJI Mavic 2 Enterprise drone, a mobile application must be connected to the drone's remote controller (RC). As previously stated, DJI provides a framework for Android devices, which enables users to access functions such as reading drone states, initiating or terminating video recording, obtaining a live feed from the drone's camera, land at a given point and starting or stopping the motors. DJI's website contains tutorials on how to implement various types of functions for the application, which have served as a foundation for learning how to communicate with the drone in this study. Moreover, GitHub hosts a diverse range of projects of varying kinds that have been explored to acquire knowledge of the DJI Mobile SDK API.
-Given that AstaZero provided an Android phone, the app-development was limited to Android.
-\todo{Här behövs det skrivas mer om hur vi går tillväga för att få drönaren att bli "självkörande".}
+Given that AstaZero provided an Android phone, the app development was limited to Android.
 
 
-
-\subsection{AstaZero's app} \label{AZ's app}
+\subsection{AstaZero's application} \label{AZ's app}
+\todo{SKRIV. Axel gör detta /Teddy, kort o koncist}
+\subsection{DJI WaypointMission}
 \todo{SKRIV}
-\subsection{DJI Waypointmission}
-\todo{SKRIV}
-
-
-
-\subsection{Image tracking} \label{Image tracking}
-In order to ensure that the camera capture the vehicles at the optimal angle, it was imperative for the drones to accurately detect the location of the cars as the drones followed them. Regarding research and implementation of object detection and image tracking, Tensorflow lite was used, which offered an extensive amount of documentation on the subject. Tensorflow lite offer a fast object detection response due to that Tensorflow models is compressed Tensorflow lite models. The output from this object detection will be an rectangle that cover the object, what the object is labeled as, the confidence for what the object is and lastly the index of the object.
+The drone is able to fly on it's own with different protocols provided by the DJI SDK. One of these protocols is the WaypointMission \cite{WaypointMission}\todo{ref funkar inte} which enables the developer to create a list of geographical locations to which the drone will fly. The developer is able to control the speed, heading, latitude and longitude the drone should have at each waypoint. It also offers a callback for different events such as mission start, waypoint reached and mission uploaded. This can be utilized to perform different actions based on the state of the mission.  
+\todo{Vetefan vad mer man kan skriva här //MS}
+\subsection{Object detection} \label{Image tracking}
+In order to ensure that the camera capture the vehicles at the optimal angle, it was imperative for the drones to accurately detect the location of the cars as the drones followed them.  
 \\ \\
-Since Tensorflow lite only offers object detection and not object tracking, an algorithm to keep track of the objects needs to be applied. Which will make that the output of the object detection will go into the tracking algorithm before the application can send instructions wheter the gimbal should change the camera angel.
+Image recognition is a rapidly developing field of computer vision that has gained significant attention in recent years. At its core, image recognition involves the automatic identification and classification of objects within digital images. This is accomplished through the use of sophisticated algorithms, which are designed to recognize specific patterns and features within the image data.
+\\ \\
+According to Myeongsuk and Sanghoon in their paper ''A review of deep learning in image recognition'', published in the Institute of Electrical and electronics engineers (IEEE) \cite{Pak2018ARecognition}, the process of image recognition is typically achieved using deep learning algorithms, such as convolutional neural networks (CNNs). These networks consist of several layers, including convolutional, pooling, and fully connected layers, which work together to extract and analyze features from the input image.
+\todo{Fråga till Martin Fabian: Räcker detta eller ska man förklara vad t.ex. convolutional, pooling och fully connected är?}
+\\ \\
+TensorFlow Lite is a library specifically developed for mobile applications which offer pre-trained models for different scenarios. One scenario is object detection. Since a phone does not have the same processing power as a normal computer the Lite models are a compressed version of the normal TensorFlow models and are less sophisticated compared to normal models. In other words, a TensorFlow lite model trades a bit of accuracy for a great increase in computational speed compared to a normal TensorFlow model, which fits our task of running such a model on a phone. 
+\\ \\
+The team made the decision to find and implement an existing pre-trained object detection model. While parts of the team had image classification experience, where convolutional layers were combined with a neural network to form a CNN, the task of classifying a single class from an image with the object in it's center is vastly different from object detection. In object detection, there is no certainty that the desired object is in the center of the image and there can be multiple objects present in the same image. Creating a model which could handle this and then training said model seemed too time-consuming since research in the field has produced efficient and accurate pre-trained models.
+\\ \\
+The problem of classifying \todo{fixa källor} multiple different objects with varying positions in an image has many solutions. Deep learning, specifically neural networks became the state of the art method for object detection in 2014 with the development of R-CNN:s (Regions with Convolutional Neural Networks). These networks showed great improvements in accuracy but were rather slow and computationally expensive, not suitable for real-time object detection. In R-CNN an algorithm called selective search is used on the image, which solves the problem of detecting multiple objects with varying size and position in various images. This algorithm proposes regions of an image likely to contain an object. The proposed regions are then sent as inputs to a CNN which in turn outputs data to a SVM. The SVM receives features extracted by the CNN, which it uses to classify the region. 
+\\ \\
+Since then, improvements have been made. Single-shot Multibox Detection (SSD) is one of those improvements. It uses the convolutional layers of some image classification model to produce detailed feature maps. A feature map is the result of applying a convolutional layer to an image. Convolutional layers use a filter of a certain size to detect features in an image. The lower (or earlier) convolutional layers identify simple features such as edges and the more convolutional layers and filters added, the more complex the identified features can be. These feature maps are then sent to the head of the SSD.
 
 \subsection{Tracking Algorithm} \label{Tracking algorithm}
-When keeping track of the objects the application needs to store the data from previous detection. Due to that the algorithm needs to keep track of where each object is and if a new object is in the image and also be able to confidently say that the previous object and this object is the same. 
-\\ \\
-A method that could be used in this algorithm is the Kalman filter \todo{kalman filter källa: https://reader.elsevier.com/reader/sd/pii/B9780128175880000106?token=FBA2F3B115B43B99DABD4E9FF292CBDFB4BA91B5D4FC3B463EC2900DD753433806C06C8E4EC57ED820C099F754E465BB&originRegion=eu-west-1&originCreation=20230504134811} which would predict the next location of the object by taking the acceleration, velocity and position into account. This would help since car is moving faster than the drone in most tests and by using the Kalman filter the car doesn't go too far away before the gimbal reacts.
 
+Object detection is a crucial process for identifying specific objects within an image or video frame. However, object tracking takes this process to the next level by not only identifying the objects, but also monitoring their movement over time.
+\\ \\
+To facilitate this transition, one of the most widely-used approaches is implementing an algorithm that can trace the identified objects from frame to frame. This is achieved by employing a tracking algorithm that utilizes a combination of features such as color, texture, and shape to effectively monitor the objects \todo{ref till Pengfei Zhang, Wei Zhu, and Hailin Jin. (2020). Object Detection and Tracking: A Review. IEEE Transactions on Intelligent Transportation Systems, 21(12), 5101-5119. doi: 10.1109/TITS.2019.2958714. IEEE xplore ligger nere}.
+\\ \\
+Several algorithms have been proposed for object tracking, including the Kalman filter, which utilizes a mathematical model to anticipate the object's position in the next frame based on its previous location and velocity. Additionally, deep learning-based tracking techniques, such as Siamese networks or correlation filters, can be employed to learn how to track objects based on their appearance characteristics. Once the objects are successfully tracked, the system can predict their location in future frames, resulting in better tracking and movement prediction.
 
 \subsection{Graphical User Interface} \label{GUI}
-Developing the GUI for the app includes designing an effective, functional and informative interface that is easy to use while also providing all the necessary controls for operating it and capturing the footage. Below are some scientifically based (GUIDELINES FOR DEVELOPING A GOOD GUI), as well as some project-based, considerations for GUI-development. 
+Developing the GUI for the app includes designing an effective, functional and informative interface that is easy to use while also providing all the necessary controls for operating it and capturing the footage. Below are some scientifically based ~\cite{AntchevaGUIDELINESGUI}, as well as some project-based, considerations for GUI-development. 
 \\
 
 \begin{itemize}
@@ -191,45 +173,35 @@ Developing the GUI for the app includes designing an effective, functional and i
 %  \item The third item 
 %  \item \dots
 %\end{enumerate}
-The design of the app has as of yet not been finalized, however some early drafts have been developed. Due to the decision to start off by developing two applications later to be merged, one for image recognition and one for making the drone fly along a trajectory sent from the app, the first version of the app implemented these functions seperately. When launching this app the first step was connecting the app to the drone. When successfully connected you were given two choices, launching the image recognition application or the waypoint mission application which allowed the drone to follow a trajectory. These different applications were rather similar, most of the screen was covered by the video feed from the drone and had some buttons to control relevant drone functions in each application. Both of these early applications therefore accomplish the previously set goals, looks-wise they do however leave something to be desired. The final design of the app will be based on the design of the waypoint mission app. We have not decided on which actions the app will allow the user to take. Since the drone is controlled by both the app and ATOS, the different actions can be implemented in either ATOS or the app. ATOS being the brain of the testing and in charge of coordinating all vehicles partaking in a test, should control the more important actions like starting a test, but letting the user of the app control some actions could be beneficial. A stop-button to make the drone stop, a return-to-home button that makes the drone fly back to its starting position are examples of useful actions to be implemented in the app. 
-
-The finer design choices such as color palette, what style of buttons to be used et cetera will be made when the functionality of the app is working as desired.
-
 
 \section{Limitations} \label{Limitations}
-This section will delineate the limitations associated with the utilization of the drone, WaypointMission, and the DJI SDK application.
+This section will delineate the limitations associated with the utilization of the drone hardware, the DJI SDK application with heavy focus in the WaypointMission software as well as the already existing code base. 
+
+\subsection{Hardware} \label{Dron limitations}
+Research into the limitations of the drone presented in section \ref{DJI} was needed to obtain necessary information on the feasibility of achieving the performance requirements. The physical limitations does not hinder the project potential as much as the software limitations described in section \ref{limits of dji sdk}. This assumption is purely based on the fact that Euro NCAP tests chosen for this project does not create an environment that pushes the limits of the drone capabilities from a hardware standpoint. Even though the drone hardware limitations, for this specific test does not become a problem, it is worth noting that there exists, for example Euro NCAP tests \cite{speed_euro_ncap} with speeds that exceeds the speed capability of the drone \cite{DJI2021MAVICSERIES}.
+\newline 
+
+In addition, the computing power of the Samsung A13 phone presented in section \ref{Samsung} is significantly limited in terms of performance compared to a desktop or laptop computer. This limitation becomes evident when performing tasks that require significant computational power, such as object detection and image recognition algorithms. Despite these limitations, with an appropriately streamlined software, the Samsung A13 can still provide a sufficient level of computational power for on-the-go image recognition tasks, such as identifying cars or people which will be done during Euro NCAP test documentation.
 
 
-\subsection{Drone limitations} \label{Dron limitations}
-Research into drone capabilities and limitations was needed to obtain necessary information on the feasibility of achieving the performance requirements. Continuous communication with AstaZero was conducted regarding the implementation of the android app and drone software.
-
-\subsection{Limits of WaypointMission} \label{limits of waypointmission}
+\subsection{Software Development Kit} \label{limits of dji sdk}
+DJI offers a commercially available off-the-shelf way to both be able to track objects and follow them at the same time. However, the drone is not capable of running these software packages in parallel, making the built in object detection and tracking useless. This is because the implementation of the WaypointMission software is prioritized, as it facilitates the drone to easily follow predetermined paths as well as enabling maneuvering of the drone camera gimbal in parallel.  
+\newline
 \label{sec:limit_WP}
-The software used to fly the drone missions, WaypointMission [Ref]\todo{referens}, had some limitations that limited how far a drone could fly while filming a test. The drone could only fly a mission with a radius of 500 meters or less. The current tests that this software aimed to film had a radius shorter than 500 meters and is therefore not a problem. If AstaZero wished to use this software to conduct other tests, this needs to be considered to ensure that the test would run.
-\\ \\
-WaypointMission also has a limit of 99 predetermined waypoints per mission. This creates a big limitation in how accurate the drone can be for larger missions and needs to be handled in the code. The trajectory sent over by ATOS might be larger than 99 points and needs to be reduced. \todo{Skriva mer och ska det ligga här?}
-\todo{Skriva att man måste ladda upp missions innan, inte on the fly}
 
-\subsection{Limits of DJI SDK} \label{limits of dji sdk}
-By using DJI SDK ActiveTrackMission there is the possibility to detect and track a chosen object. But due to that DJI limit the use of multiple missions running simultaneously, ActiveTrackMission won't be able to run during the WaypointMission. Which leads to that the gimbal will be controlled and used through another tracking algorithm. \todo{ActiveTrack källa https://developer.dji.com/api-reference/android-api/Components/Missions/DJIActiveTrackMissionOperator.html}
-\\ \\
-When choosing another algorithm to use for object tracking there needs to be considered that the provided application by AstaZero is using an older android SDK version that most object detection programs want. Which will make the object detection options smaller due to that alternatives such as OpenCV and Google's ML-kit can't be supported.
+The WaypointMission software employed for flying pre-determined missions has certain constraints that limit the drone's range, restricting its flight radius to 500m or less \cite{WaypointMission}. This is likely a safety precaution considering that the remote controller for the drone can operate within a range of around 10km under ideal circumstances. The software's current target tests are aimed at filming within a radius of less than 500 meters, which poses no issue. However, if AstaZero intends to employ the software for conducting tests at ranges greater than this, it must be taken into account to ensure the test's feasibility.
+\newline
 
-\newpage
+In addition, WaypointMission has a maximum limit of 99 predetermined waypoints per mission which poses a significant constraint on the drone's accuracy for larger missions and requires attention in the code. The trajectory provided by ATOS may consist of more than 99 points and must be reduced accordingly. See section \ref{sec:alt_douglas_peucker_algo}. 
+\newline
 
-\section{Source code listing}
-%\lstset{language=Matlab}
-\begin{lstlisting}[frame=single]
-% Generate x- and y-nodes
-x=linspace(0,1); y=linspace(0,1);
+The WaypointMissions are predetermined, static and needs to be uploaded to the drone before the test commences. During the test no changes to heading, speed or position can be changed automatically, only manually. This disables the use of a systems control implementation for compensating for wind and / or similar interference. The WaypointMission class offers a way to focus the gimbal on different points of interest at each waypoint. However, since information about where the car is located is not given through the ISO DTS 22133 protocol, this is not an option.
 
-% Calculate z=f(x,y)
-for i=1:length(x)
- for j=1:length(y)
-  z(i,j)=x(i)+2*y(j);
- end
-end
-\end{lstlisting}
+
+\subsection{Existing code base}
+When choosing another algorithm to use for object tracking, it needs to be considered that the provided application by AstaZero is using an older Android SDK version. Most modern object detection algorithms and SDK:s require newer versions of the SDK which greatly limits the options available for performing object detection and tracking.
+\todo{Den här är svår att skriva teoretisk //MS}
+
 
 %\section{To-do note}
 %The \texttt{todo} package enables to-do notes to be added in the page margin. This can be a very convenient way of making notes in the document during the process of writing. All notes can be hidden by using the option \emph{disable} when loading the package in the settings. \todo{Example of a to-do note.}

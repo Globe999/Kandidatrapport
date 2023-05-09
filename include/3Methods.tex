@@ -1,6 +1,7 @@
 
-\chapter{Methods}
-This project aims to enhance AstaZero's documentation of Euro NCAP tests conducted at their test facility, specifically tests that require aerial documentation by use of drones.
+\chapter{Methods} \todo{Teddy skriver en summering om vad som kommer i detta kapitler här/Teddy}
+%This project aims to enhance AstaZero's documentation of Euro NCAP tests conducted at their test facility, specifically tests that require aerial documentation by use of drones. \todo{bra mening men känns malplacerat på den här platsen???!? // C}
+Method outlines the methodology used by the team to automate the video documentation of a Euro NCAP test using drones. The chapter provides a detailed description of the steps taken to design and implement the system, including the hardware and software components used, as well as the testing and evaluation procedures.
 
 \section{Project setup and structure}
 The team was comprised of students from both Chalmers University of Technology
@@ -8,11 +9,9 @@ and Penn State University. There were six students from Chalmers University with
 majors in Mechanical Engineering and Automation and Mechatronics, with three
 students in each major. Furthermore, there were six students from Penn State University with diverse majors, Mechanical Engineering (3), Computer Science (1), and Computer Engineering (2). This diversification in educational foundation provided complementing strengths that were applied during the project.
 
-The primary objective of the project was to develop an android application. Said app would facilitate communication between the drones and the control system (ATOS), both supplied by AstaZero. However, there were some things in the ATOS softwarethat  needed to be modified and added in order for it to work. AstaZero had already developed an Android application with limited functionality that had basic features that allowed communication with the drone. The objective was to keep developing this app to give it more features and automate it. The main objective of the project was software development and did not involve any physical construction. However, as outlined in chapter \ref{chap:demarcation}, there were plans to incorporate hardware development if adequate time was available.
+The primary objective of the project for the Chalmers team was to develop an android application. Said app would facilitate communication between the drones and the control system (ATOS), both supplied by AstaZero. However, there were some things in the ATOS softwarethat  needed to be modified and added in order for it to work. AstaZero had already developed an Android application with limited functionality that had basic features that allowed communication with the drone. The objective was to keep developing this app to give it more features and automate it. The main objective of the project was software development and did not involve any physical construction. However, as outlined in chapter \ref{chap:demarcation}, there were plans to incorporate hardware development if adequate time was available.
 
 The team documented and wrote the report during all phases of the project. To keep track of all the different tasks and what tasks were assigned to whom, the application Trello was used as a project management board. Within the project, different persons had different roles. Some were project managers responsible for the reports, administration, Trello board and deadlines, and some focused more on developing the application. Figure \ref{fig:workflow} showed how the work had been divided into different phases of the project.
-
-
 
 \begin{figure}[H]
   \centering
@@ -25,18 +24,16 @@ The team documented and wrote the report during all phases of the project. To ke
 As previously stated, the Bachelor's Thesis was conducted as a joint venture between Chalmers University of Technology and Pennsylvania State University. Due to the time difference between the two universities, it was crucial to clearly define the division of labor. This facilitated consistent and independent work from each group, eliminating the need for constant communication.
 \\
 
-For the configuration to function properly, two pieces of software needed to be developed and integrated: ATOS and the drone app. This setup allowed for a natural division of labor between the universities, as both the app and ATOS, which had already been developed by AstaZero, could be worked on independently.
+For the configuration to function properly, two pieces of software needed to be developed and integrated: ATOS and the drone application. This setup allowed for a natural division of labor between the universities, as both the application and ATOS, which had already been developed by AstaZero, could be worked on independently.
 \\
 
-Accordingly, the Chalmers team was solely responsible for developing the drone app, while the PSU team handled the orchestration of the test objects (ATOS) and path calculations. However, since both ATOS and the app were equally crucial for the success of the project, and equally essential for the configuration to even operate, both groups had to be held accountable for upholding their part of the project.
+Accordingly, the Chalmers team was solely responsible for developing the drone application, while the PSU team handled the orchestration of the test objects (ATOS) and path calculations. However, since both ATOS and the applicatio were equally crucial for the success of the project, and equally essential for the configuration to even operate, both groups had to be held accountable for upholding their part of the project.
 
-\section{Analysis}
-\todo{Är detta överflödigt?}
-In order to compile a complete understanding of the project parameters and objectives, an analysis of the critical parts needed to be conducted beforehand. The critical parts were defined as parts that had the possibility to significantly alter the outcome of the project. The drone capabilities and limitations were assessed in relation to the Euro NCAP test. A clear and extensive comprehension of the ATOS software and communication protocols was obtained, as well as the requirements for the android app. The level of robustness of the drone software was determined, in other words, what magnitude of interference the software was capable of regulating without losing its functionality.
 
 \section{Scoping and information gathering}
 Research and information gathering were conducted continuously throughout the project and encompassed the majority of the project's initial workload. The research commenced with the introduction given by Victor Jarlow, the point of contact at AstaZero. This presentation gave crucial information on how a Euro NCAP trial was performed at the test site, the AV test control system used, as well as the project parameters and goals.
-
+\\ \\
+The team then gathered knowledge of what AstaZero already had produced and what was relevant for the team to integrate into their own application. Since the existing application also used the same communication protocol, gathering a deep understanding of the code was beneficial for the continued development of the application. The application is not intended for commercial use and is therefore not well documented so the team had to read and test the already existing code for many hours.
 %\subsection{Euro NCAP tests}
 %As per the problem statement stated in \ref{chap:problem statement}, the software is supposed to be used to film various tests conducted under the Euro NCAP specifications. The team both at PSU and Chalmers quickly decided to only focus at one test at first and expand to all tests afterwards if time allowed it. The test selected was the Autonomous emergency breaking tests - VRU outlined in section 10 of the Euro NCAP Film and Photo Protocol \cite{EuroNCAP2021EUROPEANPROTOCOL}. This test requires the use of a drone and the protocol clearly states where the drone is supposed to be at all times, making it a good test to begin with.
 
@@ -64,6 +61,7 @@ Research and information gathering were conducted continuously throughout the pr
 
 \section{Test driven development}
 Throughout the duration of the project, the software development methodology known as Test-Driven Development (TDD) has been a source of inspiration for this project. TDD is a process that follows an iterative development cycle and involves the creation of tests before writing the code itself. As a component of the agile software development approach, TDD emphasizes continuous integration, testing, and deployment ~\cite{WhatTestDriven.io}.
+\\
 
 In order to ensure the robustness of each subsystem of the drone application, it was crucial to continuously test them. This approach helped to facilitate a smoother integration process, while also providing ease in identifying any subsystem failures.
 
@@ -73,15 +71,43 @@ TDD is based on three fundamental principles: red, green, refactor. The chart de
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{figure/TDD.jpg}
-  \caption{Test driven development}
+  \caption{Illustration of test driven development}
   \label{fig:TDD}
 \end{figure}
 
-Throughout the project, the application of TDD has proved to be highly advantageous in the development of the app, with the team setting a predefined goal for each function. The difference between this development process and TDD is that the tests consisted of actual flight and gimbal movements instead of software tests. Its modular approach to code development and ease for step-by-step improvement have made the code easier to maintain. 
+Throughout the project, the application of TDD has proved to be highly advantageous in the development of the application, with the team setting a predefined goal for each function. The difference between this development process and TDD is that the tests consisted of actual flight and gimbal movements instead of software tests. Its modular approach to code development and ease for step-by-step improvement have made the code easier to maintain. 
 
-\section{Code development
+\section{Code development}
+
+The major challenges of the project were deemed to be object detection and controlling the drone's flight in accordance with the desired trajectory. The two problems were worked on simultaneously with a goal of merging them once they were fully functional individually. 
+\\ \\
+The team made the decision to find and implement an existing pre-trained object detection model. While parts of the team had experience with image classification, where convolutional layers were combined with a neural network to form a CNN, none had any experience with object detection which presents complex problems on top of image classification. There is no certainty that an object is in the center of an image used as input for an object detection model, and multiple objects can be present in the same image. Creating a model which could handle this and then training said model seemed too time-consuming since research in the field has produced efficient and accurate pre-trained models. Once a model fit for the project worked well, it could be merged with the other simultaneously developed project.
+\\ \\
+The code which would handle the flight path could be based on the DJI demo application provided by AstaZero, and the DJI WaypointMission. Since the DJI demo application provided functions to connect to the drone, the application developed to solve this problem would be the project's main application meaning it would later implement object detection. 
+
 \todo{Borde handla om ett övergripande tillvägagångsätt för mjukvarutvecklingen}
-The app should allow the drone to receive predetermined flight paths, trajectories, from ATOS and to fly along these trajectories on command. During a real test carried out by AstaZero, these trajectories will closely resemble the tested vehicles trajectories to allow the drone to film the vehicle up close. To ensure desired video quality, the drone should consistently check and adjust the angle of its camera to keep the tested vehicle in the middle of the frame. We assigned the first task of processing and flying along trajectories to one part of our group and the other task of image recognition and adjustment of the drone’s camera angle to another part of the group. The two different projects should later on be merged to provide the full functionality of the app.
+\todo{Skriv om helt. Skriv att vi jobbade. Axel löser, inte så långt typ 7 raderish//MS}
+%The app should allow the drone to receive predetermined flight paths, trajectories, from ATOS and to fly along these trajectories on command. During a real test carried out by AstaZero, these trajectories will closely resemble the tested vehicles trajectories to allow the drone to film the vehicle up close. To ensure desired video quality, the drone should consistently check and adjust the angle of its camera to keep the tested vehicle in the middle of the frame. We assigned the first task of processing and flying along trajectories to one part of our group and the other task of image recognition and adjustment of the drone’s camera angle to another part of the group. The two different projects should later on be merged to provide the full functionality of the app.
 \subsection{Image recognition}
-Image recognition and camera positioning:
-Different solutions to the task of image recognition were proposed earlier in our work, but we  learned from the sponsor that the DJI SDK comes with some functions to track an object, meaning recognising an object and adjusting the gimbal (the robotic arm controlling the camera angle) to keep said object in focus. These functions turned out to be rather sophisticated and efficient meaning our concerns of the drone not having enough computing power to quickly adapt to changes in the vehicle’s and drone’s positions ceased. This is the guide that was used https://developer.dji.com/mobile-sdk/documentation/android-tutorials/P4MissionsDemo.html . \todo{Såhär kan vi inte skriva, vi får referera istället //MS} The code from this guide was combined with a folder supplied by AstaZero which contained an early app that could communicate with the drone. After a couple of tweaks most of the desired functionality worked, the drone recognised objects and stayed in place while adjusting its rotation to keep the chosen recognised object in the center of the video feed. The goal was for the drone to adjust the gimbal, not the drone’s rotation to keep the object in its camera’s center, but code to adjust the gimbal from the other app was believed to be able to solve this issue.
+%Image recognition and camera positioning:
+%Different solutions to the task of image recognition were proposed earlier in our work, but we  learned from the sponsor that the DJI SDK comes with some functions to track an object, meaning recognising an object and adjusting the gimbal (the robotic arm controlling the camera angle) to keep said object in focus. These functions turned out to be rather sophisticated and efficient meaning our concerns of the drone not having enough computing power to quickly adapt to changes in the vehicle’s and drone’s positions ceased. This is the guide that was used https://developer.dji.com/mobile-sdk/documentation/android-tutorials/P4MissionsDemo.html . \todo{Såhär kan vi inte skriva, vi får referera istället //MS} The code from this guide was combined with a folder supplied by AstaZero which contained an early app that could communicate with the drone. After a couple of tweaks most of the desired functionality worked, the drone recognized objects and stayed in place while adjusting its rotation to keep the chosen recognized object in the center of the video feed. The goal was for the drone to adjust the gimbal, not the drone’s rotation to keep the object in its camera’s center, but code to adjust the gimbal from the other application was believed to be able to solve this issue.
+
+
+\section{Validation}
+\todo{Teddy skriver en kort summering om hur vi kommer utvärdera de både delarna ller nåt. /Teddy}
+\subsection{Flight control}
+To ensure that the application lived up to the wishes and demands from AstaZero, the team used the drone and ATOS to test different implementations during the project, utilizing the TDD philosophy, testing each module. The validation tests also laid ground for the results of the project and the big demonstration scheduled to take place at AstaZero's test track.
+\\ \\
+The team used the same baseline for the majority of the tests conducted regarding flight control and WaypointMission. In the ATOS program, the team set up a fake road with the length of 25 meters with an origin at the desired spot. The team then gradually increased the complexity of the test to see how different parts worked together. The following list showcases the most important tests conducted:
+\begin{itemize}
+    \item Achieve automatic takeoff and landing without ATOS control
+    \item Achieve automatic takeoff and landing with ATOS control
+    \item Run predetermined WaypointMission from drone code \todo{Skriv om skriv rätt //MS} without ATOS control
+    \item Run predetermined WaypointMission from drone code with ATOS control
+    \item Generate trajectory in ATOS, convert it to WaypointMission and run test with ATOS control.
+    \todo{Mer test behövs //MS}
+\end{itemize}
+To ensure that the drone would not pose any danger to anyone, the team tested the "EmergencyStop" function thoroughly with many different scenarios. Tests were conducted where the EmergencyStop was issued from both the GUI and the ATOS program in different states of the mission such as the uploading phase and running phase. To prevent the drone from posing a danger, the EmergencyStop function only stops the drone and the operators had to land the drone manually.
+\subsection{Object detection}
+\todo{Lägg in bilder från powerpoint som visar object detection från PSU}
+\todo{Här får johan och axel skriva om Object detection och tracking, axel börjar //MS}
