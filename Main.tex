@@ -1,24 +1,32 @@
  % CREATED BY DAVID FRISK, 2018
 % Title page and last page updated by Magnus Gustaver, 2020
 % Updates in Settings and addition of Acronyms and Nomenclature templates by Kyriaki Antoniadou-Plytaria, 2021
-
+\hyphenation{AstaZero}
 
 % IMPORT SETTINGS
-\documentclass[12pt,a4paper,twoside,openright]{report}
+\documentclass[12pt,a4paper,oneside,openright]{report}
 \input{include/settings/Settings}
+
+\usepackage[style=ieee]{biblatex}
+
+\addbibresource{references.bib}  % better than \bibliography
+
+
 
 \begin{document} 
 
 % If you write a bachelor thesis, change \def\ThesisType{M} to \def\ThesisType{B} in Settings.tex
 
 % COVER PAGE, TITLE PAGE AND IMPRINT PAGE
+
 \pagenumbering{roman}			% Roman numbering (starting with i (one)) until first main chapter
 \input{include/frontmatter/Titlepage}
-
 % ABSTRACT
 %\newpage
 \input{include/frontmatter/Abstract}
-
+\setcounter{page}{1}
+%SAMMANFATTNING
+\input{include/frontmatter/Sammanfattning}
 % ACKNOWLEDGEMENTS
 %\newpage
 \input{include/frontmatter/Acknowledgements}
@@ -34,31 +42,27 @@
 %\input{include/frontmatter/Nomenclature}
 
 % TABLE OF CONTENTS
-%\cleardoublepage
 \tableofcontents
-
 % OTHER FRONTMATTER
 % List of figures (add to table of contents)
-%\cleardoublepage
 \addcontentsline{toc}{chapter}{\listfigurename} 
 \listoffigures
+
 % List of tables (add to table of contents)
 \addcontentsline{toc}{chapter}{\listtablename}  
 \listoftables
 
-
+\newpage
 % START OF MAIN DOCUMENT
-%\cleardoublepage
-\setcounter{page}{1}
-\pagenumbering{arabic}			% Arabic numbering starting from 1 (one)
 \setlength{\parskip}{0pt plus 1pt}
-
-% INTRODUCTION
+\pagenumbering{arabic} % Arabic numbering starting from 1 (one)
+\setcounter{page}{1}
 \input{include/1Introduction}
+% INTRODUCTION
 % Hardware 
 
 % THEORY
-\input{include/2Theory}
+\input{include/2Background}
 
 % METHODS
 \input{include/3Methods}
@@ -66,20 +70,22 @@
 % Implementation
 \input{include/4Implementation}
 
-% Considerations
-\input{include/5Considerations}
 
 % RESULTS
 \input{include/6Results}
 
-% CONCLUSION
-\input{include/7Conclusion}
+% Considerations
+\input{include/5Considerations}
 
 %Discussion
-\input{include/8Discussion}
+\input{include/7Discussion}
 
-%
+%Future work
 \input{include/9Futurework}
+
+%CONCLUSION
+\input{include/8Conclusion}
+
 
 % REFERENCES / BIBLIOGRAPHY
 %\cleardoublepage
@@ -91,8 +97,11 @@
 \appendix
 \setcounter{page}{1}
 \pagenumbering{Roman}			% Capitalized roman numbering starting from I (one)
+\input{include/backmatter/Appendix_1}
 
-\input{include/backmatter/References.tex}
+% \input{include/backmatter/References.tex}
+
+\printbibliography[heading=bibintoc,{title=References}]
 
 \input{include/backmatter/Lastpage}
 

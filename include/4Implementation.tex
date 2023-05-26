@@ -1,97 +1,90 @@
 \chapter{Implementation}
-\todo{Teddy Kolla igenom detta /Teddy}
-In order to achieve the project objective, it was necessary to apprehend a clear and unified understanding of how the different software components would interact with each other. The contributions made by this project is able to run alongside the existing project provided by AstaZero. To facilitate this, the application can be found in a file called ChalmersDemo.java which is an Android activity that the user of the application can decide to navigate to. The user can easily navigate between these two implementations depending on the current use-state. 
+In order to achieve the project objective, it was necessary to apprehend a clear and unified understanding of how the different software components would interact with each other. The contributions made by this project should able to run alongside the existing project provided by AstaZero. To facilitate this, the application can be found in a file called ChalmersDemo.java~\cite{azGithubMobil} which is an Android activity that the user of the application can decide to navigate to. The user can easily navigate between these two implementations depending on the current use state. 
+
 \section{Re-usability of existing software}
-As mentioned before, the AstaZero team has been developing an Android application for some time that the team could utilize. The code was open source and the team decided to contribute to the existing platform instead of creating a new one. This meant that some code functions vital to the project's success already existed.
+As previously mentioned in Sec.~\ref{AZ's app}, the AstaZero team had previously developed an Android application that could be utilized. The code is currently open-source, and contributions were made to the existing platform rather than creating a new one. As a result, certain code functions critical to the success of the project had already been created.
 
-\subsection{Iso-drone}
-To establish a connection with the drone, the file IsoDrone \todo{Måste jag referea till github?} provides a Java class that can be initiated to create a drone object able to communicate over the ISO22133 protocol. This meant that the team did not have to worry about the conversion of data into ISO-formatted strings but instead only could change variables of the current speed, heading, coordinates and similar and the drone object automatically transmitted this over the ISO22133 protocol. 
+\subsection{IsoDrone}
+To establish a connection between ATOS and the drone, the file IsoDrone~\cite{azGithubMobil} provides a Java class that can be initiated to create a drone object able to communicate over the ISO22133 protocol as presented in Sec.~\ref{ISO}. All test objects needs to report the status of the object every X seconds, decided in the ATOS configuration. The need to convert flight telemetry data into ISO-formatted strings were redundant, as this was already handled by the IsoDrone object. Instead, class variables could simply be changed to adjust current speed, heading, coordinates, and similar. The IsoDrone object then automatically transmitted this over the ISO22133 protocol to ATOS. 
 \\ \\
-The protocol also enables the drone object to know what state ATOS is currently in and the application uses this to set up triggers for when the state changes as described in figure \ref{fig:drone-flow}
+Moreover, the protocol enabled the drone object to identify the current state of ATOS. This allowed the application to set up triggers that would activate when the state changed.
 
-\subsection{Waypoint 1 Activity}
-Since ATOS works with a local coordinate system, the location coordinates had to be converted to latitude and longitude coordinates in the Android application. This conversion was already present in the Waypoint1Activity file and works by first reducing the amount of points and then create a square matrix A with dimensions equal to the number of waypoints in the trajectory, and an array b with the same length as A's dimensions. It then populates A and b with values based on the trajectory information. Next, it uses a LUDecomposition solver to find the radii for each waypoint, which will be used to define the radius of a circular area around each waypoint in which the drone will fly.
-\\
+\subsection{Local coordinates to Latitude and Longitude}
+Since ATOS worked with a local coordinate system, the location coordinates had to be converted to latitude and longitude coordinates in the Android application. The function handling the conversion was already present in the Waypoint1Activity file~\cite{azGithubMobil} and works by first reducing the amount of points and then creating a square matrix A with dimensions equal to the number of waypoints in the trajectory, and an array b with the same length as A's dimensions. It then populates A and b with values based on the trajectory information.
+\\ \\
+To find the radii for each waypoint, which will be used to define the radius of a circular area around each waypoint in which the drone will fly, the Android application utilizes LU decomposition. LU decomposition is a numerical method that decomposes a matrix into the product of two matrices: a lower triangular matrix (L) and an upper triangular matrix (U).
+\\ \\
+In the context of the waypoint conversion, LU decomposition is applied to the matrix A. By decomposing A into L and U, the Android application can efficiently solve the system of linear equations represented by the matrix equation $A * x = b$.
+\\ \\
+The LU decomposition allows for efficient solving of systems of equations, as it simplifies the process of finding the radii for each waypoint. Once the decomposition is performed, the solver can easily solve the equations for the radii, providing the necessary information to define the circular flight areas for the drone.
+\\ \\
+Finally, the method created parameters for each waypoint in the trajectory. It uses a method to convert the waypoint's Cartesian coordinates to geographic coordinates. It then sets various parameters, including the heading, altitude, and speed of the drone at each waypoint, as well as the radius calculated earlier.
 
-Finally, the method creates WaypointSetting objects for each waypoint in the trajectory. It uses a method to convert the waypoint's Cartesian coordinates to geographic coordinates. It then sets various properties of each WaypointSetting, including the heading, altitude, and speed of the drone at each waypoint, as well as the radius calculated earlier.
-
-\subsection{Douglas-Peucker Algorithm} \label{douglas_puecker}
-With the WaypointMission limitations presented in section \ref{sec:limit_WP}. The AstaZero team made use of the Ramer-Douglas-Peucker algorithm which is used for reducing the number of points in a curve while preserving its shape. %\todo{REFERERA!!!! http://www2.ipcku.kansai-u.ac.jp/~yasumuro/M_InfoMedia/paper/Douglas73.pdf}
-This implementation made it possible to use trajectory files that normally would be composed of too many points to be run by the DJI WaypointMission software. \\  
-
-The algorithm divides the line recursively, starting with all points between the first and last one. The first and last points are automatically selected and retained, it then identifies the point that is the maximum distance from the line segment. If the point is more than a predefined tolerance away from the line segment, it must be selected as a new start- and endpoint, otherwise the point can be discarded without impacting the shape of the curve. The algorithm recursively calls itself on the two newly created segments and the process is repeated for each new line segment until all the points are outside of the given tolerance. Figure \ref{fig:douglas_peucker} visualizes the algorithm. The result is a new curve with fewer points that still closely approximates the original one.
+\subsection{Ramer-Douglas-Peucker Algorithm} \label{douglas_puecker}
+With the WaypointMission limitations presented in Sec.~\ref{sec:limit_WP}, the AstaZero team made use of the Ramer-Douglas-Peucker algorithm which is used for reducing the number of points in a curve while preserving its shape~\cite{Douglas1973ALGORITHMSCARICATURE}. This implementation made it possible to use trajectory files that normally would be composed of too many points to be run by the DJI WaypointMission software.  
+\\ \\
+The algorithm divides the line recursively, starting with a line segment between the first point and last one. The first and last points are automatically selected to be retained, it then identifies the point that is the maximum distance from the line segment. If the point is more than a predefined tolerance away from the line segment, it must be selected as a new start- and endpoint, otherwise the point can be discarded without impacting the shape of the curve. The algorithm recursively calls itself on the two newly created segments and the process is repeated for each new line segment until all the points are outside of the given tolerance. Fig.~\ref{fig:douglas_peucker} visualizes the algorithm. The result is a new curve with fewer points that still closely approximates the original one.
+\\ \\
+This algorithm was extensively employed in the deployment of curved trajectories to test objects that communicate over the ISO22133 protocol, primarily drones. However, it posed a challenge when deploying trajectories that only comprised points in a straight line, as it tended to reduce too many points. The subsequent section outlines a solution to this issue.
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.1]{figure/douglas_peucker_illustration.png}
-    \caption{Illustration of the Ramer-Douglas-Peucker Algorithm}
+    \caption{Illustration of the Ramer-Douglas-Peucker Algorithm. Source: Primary}
     \label{fig:douglas_peucker}
 \end{figure}
-\todo{Kolla så att texten inte har massa mellanrum pga bilden}
-This algorithm is heavily used when deploying curved trajectories to ISO-objects, especially drones, but it also presents a problem when deploying trajectories that only consist of points in a straight line, it reduces too many points. The solution for this problem is presented in the next section \ref{sec:alt_douglas_peucker_algo}. 
 
-\section{Addition to Douglas-Puecker algorithm}
+\section{Addition to Ramer-Douglas-Puecker algorithm}
 \label{sec:alt_douglas_peucker_algo}
-The vast majority of the Douglas-Puecker implementation produced by the AstaZero team was used with only minor modification and additions. The problematic aspect of the algorithm was that it reduced too many points when presented with a trajectory in a straight line, leaving too few to points in the trajectory object to be sent to the next part of the point reduction implementation. The solution to this problem was to develop a simple collinearity check of the trajectory before applying the algorithm. If all points in the trajectories lies on a straight line the algorithm will be superseded as it is overly complex for such a simple case. 
+The vast majority of the Ramer-Douglas-Puecker implementation produced by the AstaZero team was used with only minor modification and additions. The problematic aspect of the algorithm was that it reduced too many points when presented with a trajectory in a straight line, leaving too few\todo{tog bort to} points in the trajectory object to be sent to the next part of the point reduction implementation. The solution to this problem was to develop a simple collinearity check of the trajectory before applying the algorithm. In cases where all points in the trajectory lie on a straight line, the Ramer-Douglas-Peucker algorithm becomes overly complex and is therefore unnecessary. Moreover, adding a tolerance was deemed unnecessary as any straight segments in the programmatically generated trajectories would not deviate from the pre-defined path unless it was an intended curvature. Consequently, adding a tolerance would only introduce unnecessary complexity.
 \newline
 
-The addition to the algorithm works by extracting the two first point of the input in order to create a reference line for all remaining points. It then makes use of one of the algorithms loops which iterates through every point in the input, if the cross product of resulting vector from the first to the current point and the reference line is zero, the current point is collinear with the reference line. This calculation is done for every point in the input trajectory and if any resulting vector from the current point would fail to produce a cross product equal to zero, a \textit{isCollinear} variable would be set to false. This would disable the superseding of the Douglas-Puecker algorithm and allow to to run as intended. Algorithm \ref{DP_code} describes the addition to the Douglas-Puecker algorithm in pseudocode. 
-
-\begin{algorithm}[H] \label{DP_code}
-\caption{Pseudo code of the addition to the existing Douglas-Peucker algorithm}
+The algorithm's addition functioned by extracting the first two points of the input to establish a reference line for all subsequent points. Thereafter, one of the algorithm's loops was employed to iterate through each point in the input. During each iteration, if the cross product of the vector generated by the first and current points and the reference line equaled zero, the current point was determined to be collinear with the reference line. This calculation was done for every point in the input trajectory and if any resulting vector from the current point would fail to produce a cross product equal to zero, a \textit{isCollinear} variable is set to false. This would disable the superseding of the Ramer-Douglas-Puecker algorithm and allow it to run as intended. Algorithm~\ref{DP_code} describes the addition to the Ramer-Douglas-Puecker algorithm in pseudocode. 
+\\ \\
+\begin{algorithm}[H]
+\caption{Pseudocode of the addition to the existing Ramer-Douglas-Peucker algorithm}\label{DP_code}
 \SetAlgoLined
-\SetKwFunction{douglasPuecker}{doglasPuecker}
+\SetKwFunction{douglasPuecker}{douglasPuecker}
 \SetKwProg{Fn}{Function}{:}{}
 \Fn{\douglasPuecker{$traj$, $resultTraj$}}{
-$**Algorithm\ starts**$
-
-\If{size of $traj$ < 3}{
-\Return $traj$
-}
-$isColinear \gets true$;
-
-$x1, y1 \gets traj[0]$;
-
-$x2, y2 \gets traj[size\ of\ traj]$;
-
-\For{$i$ \gets 0\ \KwTo\ size\ of\ traj}{
-$...$
-
-$px, py \gets traj[i]$;
-$crossProduct \gets (x2 - x1) \cdot (py - y1) - (y2 - y1) \cdot (px - x1)$;
-
-\If{$crossProduct \neq 0$}{
-$isColinear \gets false$;
-}
-
-$...$
-}
-
-\If{size of $traj$ > max number of points \& isColinear}{
-$multiplier \gets \lfloor \frac{\text{size of } traj}{\text{max number of points}}\rfloor$;
-
-\For{$i\gets 0$ \KwTo size of $traj$-1}{
-$resultTraj \gets resultTraj + [traj[i]]$;
-
-$i \gets i + multiplier$
-}
-$resultTraj \gets resultTraj + traj[size\ of\ traj]$;
-
-\Return $resultTraj$;
-}
-%\caption{Collinearity addition to Douglas-Peucker algorithm}
+    $**Algorithm\ starts**$\;
+    \If{size of $traj$ < 3}{
+        \Return $traj$\;
+    }
+    $isColinear \gets true$\;
+    $x1, y1 \gets traj[0]$\;
+    $x2, y2 \gets traj[\text{size of traj} - 1]$\;
+    \For{$i \gets 1$ \KwTo\ size of $traj$}{
+        $**First\ part\ of\ Ramer\ Douglas\ Peucker\ algorithm\ runs**$\;
+        $px, py \gets traj[i]$\;
+        $crossProduct \gets (x2 - x1) \cdot (py - y1) - (y2 - y1) \cdot (px - x1)$\;
+        \If{$crossProduct \neq 0$}{
+            $isColinear \gets false$\;
+        }
+        $**Original\ Ramer\ Douglas\ Peucker\ algorithm\ continues**$\;
+    }
+    \If{size of $traj$ > max number of points \textbf{\textup{and}} isColinear}{
+        $multiplier \gets \lfloor \frac{\text{size of } traj}{\text{max number of points}}\rfloor$\;
+        \For{$i \gets 0$ \KwTo\ size of $traj$-1}{
+            $resultTraj \gets resultTraj + [traj[i]];$\;
+            $i \gets i + multiplier;$\;
+        }
+        $resultTraj \gets resultTraj + traj[\text{size of traj}]$\;
+        \Return $resultTraj$\;
+    }
 }
 \end{algorithm}
 
-\section{Chalmers Demo Activity} \label{sec:chalmers_demo_activity}
 
+\section{Main Activity} \label{sec:chalmers_demo_activity}
+As stated in Sec.~\ref{Java, Android....}, activities are the basic building blocks of any Android application, including the AstaZero application. Each activity in the provided application represents a unique screen with its own graphical user interface, consisting of various elements like buttons, text views, images, and input fields. Every activity is responsible for managing its own tasks, such as establishing a connection between a remote controller and a drone. 
+\\
 
-Activities serve as the fundamental building blocks of any Android application, including the application provided by AstaZero. Each activity corresponds to a distinct screen within the application, serving as the primary element responsible for displaying and managing the graphical user interface. The GUI is then be comprised of many different elements, such as buttons, text views, images, and input fields, and can interact with other activities, components and code. The provided application consisted of several activities with its own GUI, that managed their own tasks, such as making sure the remote controller has a connection to a drone. The first iteration of the Chalmers Demo Activity GUI is presented in the next section, \ref{sec:implement_GUI}. 
-
-
+The utilized approach facilitated the creation of a custom activity, named ChalmersDemo.java, which comprises the majority of the code employed in this project. Accompanying ChalmersDemo.java, an associated XML file, activity\_chalmers\_demo, contained all the visual details for the activity, as presented in the subsequent section. This approach ensured that the code provided by AstaZero for other functionalities remained unaffected, as it has its own activities.
 
 \section{Graphical user interface} \label{sec:implement_GUI}
-The GUI was developed continuously during the course of the project, going through different iterations. The goal with the GUI was to make it as easy and as intuitive as possible, limiting the amount of buttons and information shown on the screen. The information relevant was determined to be:
+The GUI was developed continuously during the project, going through different iterations. The goal with the GUI was to make it as easy and as intuitive as possible, limiting the number of buttons and information shown on the screen, seen in Fig.~\ref{fig:GUI_v1}. The relevant information was determined to be:\\
+
 \begin{itemize}
     \item The video feed of the camera with detected objects highlighted
     \item Latitude, longitude and altitude
@@ -104,77 +97,64 @@ The GUI was developed continuously during the course of the project, going throu
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{figure/v_1.2_GUI_demo_app.png}
-    \caption{The first design idea for the GUI}
-    \label{fig:my_label}
+    \caption{The first design idea for the GUI. Source: Primary}
+    \label{fig:GUI_v1}
 \end{figure}
-This was implemented using the programming language XML and relies on a RelativeLayout hierarchy\todo{ref} and contains different views. 
+This was implemented using XML and relies on a RelativeLayout hierarchy that contains different views as can be seen in the project \cite{azGithubMobil}. 
 \newline
 
-While the drone control application has yet to be finalized, the GUI implementation has come a long way. The initial plan was to create two separate applications - one for image recognition and another for sending trajectory data to the drone - the first version of the application was developed to implement these functions separately. This was quickly merged in to one development process and went through some iterations, but kept the general layout. The goal remained the same, to make it as simple and easy to use as possible. The team added and removed parts as the team gathered more knowledge and information from the client during the project.
-
+The GUI implementation was developed using two different strategies. The initial strategy was to create two separate applications, one for object tracking   and another for receiving trajectory data and flying the drone. This was quickly merged into one development process and went through different iterations, while maintaining the general layout. Parts were added and removed as the knowledge base increased with continuous input from the client, ultimately resulting in the final version of the GUI as presented in \ref{res: GUI}.
 
 \section{DJI Flight Controller} \label{sec:DJI_flight_controll}
-The flight aspect of the project is one of two main parts, the other one being object tracking presented in section \ref{sec:object_track}.
+The flight aspect of the project is one of two main parts, the other one being object tracking presented in Sec.~\ref{sec:object_track}.
 
-\subsection{Updating the flight controller}
-As presented in section \ref{Java, Android....} the Android application makes heavy use of DJI's mobile SDK as it is the primary way of for third party software to interact with the drone. The foundation of this interaction is built upon the flight controller object, it facilitates the interaction between the drone's different flight enabling systems. 
+\subsection{Updates from the flight controller}
+As presented in Sec.~\ref{Java, Android....}, the Android application makes heavy use of DJI's mobile SDK as it is the primary way for third-party software to interact with the drone. The foundation of this interaction is built upon the flight controller object~\cite{dji_flightcontroller} which facilitated the interaction between the drone's different flight-enabling systems. 
 \newline
 
-The flight controller is initialized via its DJI SDK constructor, this is also where a callback state for the controller is specified. On every update, which is set to be initiated 10 times every second, the callback provides the program with relevant information, such as of the drone's GPS position in latitudinal and longitudinal coordinates, strength of the GPS signal and the current altitude. During the callback, the method which update the flight data is called. In this method, the flight controller object is then utilized multiple times in several different methods. The primary use involves creation, deployment and activation of the WaypointMissions. The update flight data is also the part which integrates ATOS into the android application, figure \ref{fig:drone-flow} and the following paragraph describes the integration. 
+The DJI SDK constructor was used to initialize the flight controller, and a callback function for the controller was specified at the same time. This callback function provided the application with relevant information on every update, which occurred 10 times per second. This information included the drone's GPS position in terms of latitude and longitude, the strength of the GPS signal, and the current altitude. During the callback, a method was called to update the IsoDrone's flight data. This method utilized the flight controller object multiple times in various ways. One of its primary uses was to create, deploy, and activate WaypointMissions. The update flight data method also integrated ATOS into the Android application. An illustration of ATOS integration is provided in Fig.~\ref{fig:drone-flow}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{figure/Flowchart-drone.png}
-    \caption{Flight data update flow chart}
+    \includegraphics[scale=0.45]{figure/Flowchart-drone.png}
+    \caption{Flight data update flow chart. Source: Primary}
     \label{fig:drone-flow}
 \end{figure}
 
-ATOS makes use of a object control module that communicates and sends transmission of trajectories via the ISO22133 protocol for all ISO-objects in the current test. The drone application subsequently receives this data through its corresponding ISO-drone object when ATOS cycles states, this prompts the flight data to be updated and different sequences of actions are triggered.
-\newline
-
-When the state of the ISO-drone changes from Disarmed to Armed, the trajectory is passed through the application and verified that its in the right format. If the trajectory is too large, it is to be reduced by the algorithm described in sections \ref{douglas_puecker} and \ref{sec:alt_douglas_peucker_algo}. When the trajectory is correct, the application transforms the trajectory into global latitudinal and longitudinal coordinates through a coordinate conversion script developed by AstaZero. The application then transmits the trajectories to the drone via a DJI protocol from the remote controller connected the the android phone. Following this, the test commences when the ATOS state is changed to "Running", and the drone as well as all other test objects execute their pre-determined paths. 
+When the state of the IsoDrone changes from Disarmed to Armed, the trajectory is passed through the application and verified to be in the right format, as can be seen in Fig.~\ref{fig:drone-flow}. If the trajectory is too large, it is reduced by the algorithm described in Sec. ~\ref{douglas_puecker} and Algorithm~\ref{DP_code}. When the trajectory is correct, the application transforms the trajectory into global latitudinal and longitudinal coordinates through a coordinate conversion script developed by AstaZero. The application then transmits the trajectories to the drone via a DJI protocol from the remote controller connected to the Android device and the drone flies to the first waypoint. At the first waypoint, the drone stops and hovers in its place. Following this, the test commences when the ATOS state is changed to ``Running'', and the drone as well as all other test objects execute their pre-determined paths. 
 
 \subsection{Updating the GUI} \label{sec:updating_UI}
+Updating the user interface was crucial for providing real-time information about the drone's location, altitude, and GPS signal strength as well as showing the test track personnel what is currently being filmed. The GUI had to be updated continuously, and this was achieved by also sending information to the GUI when receiving the callback presented in Sec.~\ref{sec:DJI_flight_controll}. The GUI also used information such as IP address and ATOS state from the IsoDrone object, as well as the current waypoint the drone is flying towards. This facilitated the real-time updates needed by the drone operator to make sure the application and drone was running the way it was intended to be run.
 
-Updating the user interface is crucial for providing real-time information about the drone's location, altitude, and GPS signal strength as well as showing the test track personnel what is currently being filmed. The GUI must be updated continuously, and this is achieved by also sending information to the GUI when receiving the callback presented in section \ref{sec:flight_controll}. The GUI also utilized information such as IP-address and ATOS state from the ISO-drone object as well as which the target waypoint in the current WaypointMIssion from the flight controller. 
-
-
-
-\section{Image recognition} \label{sec:image_rec}
-As mentioned in 2.2.7 TensorFlow Lite will be used for object detection in the project mainly because it has the fast response that is needed during the test. The image recognition is heavily inspired by an open source project \todo{Github källan: https://github.com/mrinalTheCoder/ObjectDetectionApp} that have already done a object detection application using Tensorflow Lite. 
+\section{Object detection} \label{sec:image_rec}
+Object detection was only implemented using the mobile camera and not the drone camera due to a couple of obstacles described in Ch.~\ref{sec:discussion}.
 \\ \\
-The pre trained model that is used is trained to detect 90 objects such as a person, car, bicycle and some more objects. A reason a model that can detect 90 objects is used is due to that it is more reliable than a model that is trained to only detect 2 objects like a person and car, which is mostly used during a Euro NCAP test. That is because if a model could only detect a person and a car it more often than not label a object as something that it isn't. Another reason that this model is used is because it can detect objects such as trucks, motorcycles, buses and more objects that could potentially be used during tests. The problem that could occur when using a bigger model is that it is slow but testing the model in action it responded fast enough. \todo{Axel, skriv lite om hur modelen fungerar med coco och ssd}
+As mentioned in Sec.~\ref{sec:Obj_detextion}, TensorFlow Lite was used for object detection in the project, mainly because it had the fast classification that was needed during the test. The image recognition is heavily inspired by an open source project~\cite{githubTensorFlowApp} that uses a TensorFlow Lite model to recognize objects. 
 \\ \\
-The camera feed from the phone is sent to the application in a RAW format and shown on the screen. After the video is shown, a frame from the feed is sent to run in the background to be converted from RAW to RGBA in a bitmap format due to that is how the frame needs to be in order for it to run through the model. When the frame is in the right format it is being sent to run through the object detection. The output you get from that are the following:
-\begin{enumerate}
-    \item Index - all the objects is numerated
-    \item Labels - what kind of object is it
-    \item Confidence - How sure the model is about the predicted object from 0-100 \%
-    \item Rectangle - A rectangle over the objects location
+The application utilized a pre-trained SSD model which uses the convolutional layers of MobileNet v.1.0. The ssd\_mobilenet\_v1\_coco model~\cite{TensorFlow2021TensorFlowZoo} was selected and is visualized in \ref{Apend:object_detect_model_1} and \ref{Apend:object_detect_model_2}. As described in Sec.~\ref{ssdbackground}, an SSD offers computational efficiency while retaining competitive accuracy, making it a perfect fit for a real-time object detection running on a mobile device. Despite the model looking intricate and excessively detailed, the number of parameters is relatively low for the task at hand. The model uses convolutions layers to reduce the number of parameters compared to alternative models such as the Inception V2 and VGG16\cite{mobilenet} which uses 10 million and 14 million parameters respectively. The MobileNet only uses 3.2 parameters. The relatively low amount of parameters enhances the speed of the model, making it the best fit for the task at hand~\cite{cnnforklarning}.
+\\ \\
+The last part of the model's name, ''coco'', implies that the model has been trained on the COCO dataset~\cite{COCOConsortiumCommonContext}. The COCO dataset is a free website which provides over 200 thousand labeled images to train models on. The model used is able to detect around 90 objects, including persons, cars, bicycles and many more. The selection of this particular model was based on its ability to detect a wide variety of objects, thus rendering it versatile in numerous situations. The Euro NCAP test comprises evaluations where the objects to be detected could be other than cars, including trucks and bicycles. Having a model that can recognize diverse objects offers the test operator the liberty to track any object on the premises with minimal code modifications.
+\\ \\
+The camera feed from the mobile device was transmitted to the application in a RAW format, which is an unprocessed image data format~\cite{Menasco2022MethodFormat}, and subsequently decoded and displayed on the screen. As the video was displayed, a frame from the feed was simultaneously sent to be processed in the background and converted from RAW to RGBA format in a bitmap. The RGBA color model is a three-channel, red-green-blue color representation enriched by an additional alpha channel~\cite{Menasco2022MethodFormat}. This transformation was necessary because the chosen model required the input image to be in the RGBA format.
+The model output has different attributes for each detected object, which are:\\
+\begin{enumerate}\itemsep0.3pt
+    \item Index - The index of the identified object
+    \item Label - The type of the object
+    \item Confidence - How sure the model is about the predicted object, 0-100\,\%
+    \item Rectangle - Coordinates for drawing a rectangle over the detected object\\
 \end{enumerate}
-Since the interesting objects in this case is people and cars the detection function has been modified to only send the data about those objects who have been labeled person or car. To be more confident that the model doesn't label a object as something that it isn't the function check if the confidence is over 50\% then the object is valid. When done running through the frame and labeling the objects the rectangles for each object will be presented on the screen as an overlay view over the video feed. To the rectangles it is also shown what the label for the object is and what the confidence is.
+Since the tests would be conducted in controlled conditions with only a few other objects, several tests were carried out and a confidence threshold value of 50\% was found to be optimal.
+\\ \\
+Consequently, the model was configured to detect people and cars only, and the results were filtered to display only the detected instances of these objects. However, if there arises a requirement to detect other types of objects, such as trucks or buses, the code can be easily modified accordingly. If an object was detected with a confidence score lower than the threshold, it was ignored. As the function iterated through the detected objects, it also annotated the video stream with labeled rectangles and their respective confidence scores. An illustration describing the image recognition process can be seen in Fig.~\ref{fig:Objectdetection-flowchart}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.15]{figure/ObjectDetection_car.jpg}
-    \includegraphics[scale=0.15]{figure/ObjectDetection_person.jpg}
-    \caption{Screenshots from the phone}
-    \label{fig:Objectdetection-screenshot}
+    \includegraphics[scale=0.45]{figure/object_detection_illustration.png}
+    \caption{Flowchart describing the object detection sequence. Source: Primary}
+    \label{fig:Objectdetection-flowchart}
 \end{figure}
 
-
-
-
-%To use Tensorflow Lite the application firstly needs to take in a frame from the video feed in a Bitmap format. To achieve this there needs to be some sort of callback to receive the frame data to run the image through the model. In this case the gimbal is sending the video in the format of H.264 but DJI SDK offers a YUV data callback solution which make it possible to receive a frame from the video feed but now in the YUV data format. \todo{lägg in källa: https://developer.dji.com/api-reference/android-api/Components/CodecManager/DJICodecManager.html}. When the receiver gets the frame in the YUV data format there needs to be a transformation to make the YUV into a Bitmap. \todo{Ska vi prata om alla problem som uppstod med DJI SDK som gjorde att vi inte blev klara eller förklara vad som hade hänt om DJI inte är några rövhål?}
-
 \section{Object tracking} \label{sec:object_track}
-\todo{Fundera på om det ska skrivas något här/JG}
-
-
-
-
-
-
-% \subsection{Merging the apps}
-% When both apps worked decently we tried merging the apps. Pretty quickly we realized the DJI SDK did not support running parallel missions in our case the waypoint mission and the activetrack mission. We are currently working on fixing this, by using the waypoint mission and running a convolutional neural network to identify cars on images from the video feed then using the pixel-coordinates of the object to adjust the gimbal.
+As previously mentioned in Sec.~\ref{Tracking algorithm}, object tracking needs to be implemented with the use of object detection to track chosen vehicle. But as stated in the previous section, object detection is only implemented on the mobile camera and not the drone camera, where the object tracking algorithm was supposed to be. Since the adjustments needed for the tracking algorithm relied on the movement of the camera gimbal, it was decided to not pursue a solution until the object detection algorithm was fully functional on the drone camera.
+ 
 
